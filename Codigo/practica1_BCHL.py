@@ -1,234 +1,201 @@
-#Practica 1: Algoritmo genetico
-#Beltran Saucedo Axel Alejandro
-#Ceron Samperio Lizeth Montserrat
+#Práctica 3: Permanencia de Datos con Base de Datos
+#Equipo:
+#Beltrán Saucedo Axel Alejandro
+#Cerón Samperio Lizeth Montserrat
 #Higuera Pineda Angel Abraham
 #Lorenzo Silva Abad Rey
 
-#Librerias a utilizar 
-#Random sirve para utilizar funciones aleatorias
-import random
-#Nos permite crear interfaces en Python
-from abc import ABC, abstractmethod
+#Para que pueda arrancar, se debe instalar sqlmodel: pip install sqlmodel 
+#Recordar que se debe ejecutar/iniciar el servidor en la terminal
+#Con el comando: python -m uvicorn Codigo.practica1_BCHL:app --reload
+#Al parecer se debe especificar lo de python, ya que puede que no detecte el uvicorn sin el
+#Para ver la pagina y realizar operaciones, visitar: http://127.0.0.1:8000/docs
 
-#Interface utilizada para el cambio de metodo de seleccion
-class MetodoSeleccion(ABC):
-    @abstractmethod
-    def seleccionar(self, poblacion):
-        pass
+#Importamos los modulos (librerias) necesarias
 
-#Seleccion por ruleta
-class SeleccionRuleta(MetodoSeleccion):
-    def seleccionar(self, poblacion):
-        #Calcula la suma total de las aptitudes de la poblacion
-        #Si todo el mundo tiene 0, elige uno al azar 
-        total_aptitud = sum(ind.aptitud for ind in poblacion.sujetos)
-        if total_aptitud == 0:
-            return random.choice(poblacion.sujetos)
-        #Es momento de girar la ruleta
-        punto = random.uniform(0, total_aptitud)
-        acumulado = 0
-        for ind in poblacion.sujetos:
-            acumulado += ind.aptitud
-            if acumulado >= punto:
-                return ind
+#FastApi es el modulo principal, HTTPException es un manejador de errores, como el "no encontrado" 
+#Status es un modulo de indentificacion de codigos de estado HTTP, como el clasico 404
+#Depends es un mecanismo para poder inyectar dependencias
+from fastapi import FastAPI, HTTPException, status, Depends
+#Field es usado para definir las propieddes de los campos del modelo
+#create_engine se usa para crear un motor que conectara la base de datos con la aplicacion
+#Session es el enncargado de manejar la comunicacion con la base de datos
+#SQLModel sera la base para los modelos de datos
+from sqlmodel import Field, create_engine, Session, SQLModel
+#Optional y List son tipos de datos que permiten definir campos opcionales y listas
+#Se usan para definir los modelos de datos y las respuestas de la API
+from typing import Optional, List
+#Annotated es una forma para escribir tipos con metadatos
+from typing_extensions import Annotated
 
-#Seleccion por torneo
-#Torneo es el metodo de seleccion más rapido de hacer, se recomienda utilizar el metodo de ruleta
-class SeleccionTorneo(MetodoSeleccion):
-    def __init__(self, k=3):
-        #En caso de generar un error la seleccion, se pasara a utilizar ruleta
-        self.k = k
-        self.fallback = SeleccionRuleta()  #Ruleta como respaldo
+#Creamos la instancia de FastAPI
+#Es el corazon de nuestro programa (API)
+app = FastAPI(
+    #Nombre y descripcion de la API
+    title= "Practica 3: Permanencia de Datos con una Base de Datos",
+    description= "API para almacenar, editar, actualizar y borrar la información de los paquetes (items) a ser enviados," 
+    "garantizando la persistencia de los datos mediante una base de datos"
+)
 
-    def seleccionar(self, poblacion):
-        #Elige k indivudos al azar y se queda con el mejor
-        participantes = random.sample(poblacion.sujetos, min(self.k, len(poblacion.sujetos)))
-        if all(ind.aptitud == 0 for ind in participantes):
-            #Si todos son inválidos, usamos ruleta
-            return self.fallback.seleccionar(poblacion)
-        return max(participantes, key=lambda ind: ind.aptitud)
+#Estructura de los datos con Pydantic
 
-#Clase sujeto
-#Son las posibles soluciones al problema de la mochila
-class Sujetos:
-    def __init__(self, num_objetos):
-        #Lista de 0 y 1 
-        self.genes = [random.randint(0, 1) for _ in range(num_objetos)]
-        #Valor total de la combinacion
-        self.aptitud = 0
+#ItemBase es la estructura base de un item, con los campos ganancia y peso
+#Digamos que es lo que tiene cada item
+#Esta obtiene las funcionalidades de Pydantic y SQLAlchemy heredandolas de SQLModel
+class ItemBase(SQLModel):
+    ganancia: float
+    peso: float
+#Item contiene el indentificador unico (id) y hereda los campos de ItemBase
+#y con table=True se marca como una tabla
+class Item(ItemBase, table=True):
+    id: Optional[int]=Field(default=None, primary_key=True)
+#ItemUpdate es una clase especial utilizada para cuando queremos actualizar un item parcialmente
+#Los campos son opcionales, ya que podemos querer actualizar solo uno de ellos
+#El valor por defecto es None
+#primary_key marca el campo como la clave primaria(ID)
 
-    #Recorre los genes, si un gen vale 1, sumamos el peso y su valor
-    def calcular_aptitud(self, pesos, valores, capacidad):
-        peso_total = 0
-        valor_total = 0
-        for i in range(len(self.genes)):
-            if self.genes[i] == 1:
-                peso_total += pesos[i]
-                valor_total += valores[i]
-        #Si pasa la capacidad es inválido la aptitud es 0
-        #Si cabe su aptitud es el valor total de los objetos dentro.
-        if peso_total > capacidad:
-            self.aptitud = 0
-        else:
-            self.aptitud = valor_total
-        return self.aptitud
+#ItemCreate sera usado para recibir los datos cuando estemos creando un nuevo item
+#Hereda de ItemBase
+class ItemCreate(ItemBase):
+    pass
 
-#Clase de la poblacion 
-class Poblacion:
-    def __init__(self, num_individuos, num_objetos):
-        #Crea una lista con los genes aleatorios
-        self.sujetos = [Sujetos(num_objetos) for _ in range(num_individuos)]
-    #Evalua la aptitud de cada individuo con respecto al problema de la mochila.
-    def evaluar(self, pesos, valores, capacidad):
-        for ind in self.sujetos:
-            ind.calcular_aptitud(pesos, valores, capacidad)
+#ItemUpdate sera usado para recibir los datos cuando queramos actualizar un item con PATCH
+class ItemUpdate(SQLModel):
+    peso: Optional[float] = None
+    ganancia: Optional[float] = None
 
-#Operaciones del algoritmo genetico 
-#Se controla todo el proceso de seleccion, crice, mutuacion y generaciones
-class AlgoritmoGenetico:
-    def __init__(self, pesos, valores, capacidad, estrategia_seleccion,
-                 num_individuos=20, generaciones=50, prob_mutacion=0.01):
-        #Recibe los pesos, valores y capacidad del problema
-        #Numero de generaciones y sus propbabilidades de mutar
-        self.pesos = pesos
-        self.valores = valores
-        self.capacidad = capacidad
-        self.num_objetos = len(pesos)
-        self.prob_mutacion = prob_mutacion
-        self.generaciones = generaciones
-        self.num_individuos = num_individuos
-        self.estrategia = estrategia_seleccion
-        self.poblacion = Poblacion(num_individuos, self.num_objetos)
-        self.poblacion.evaluar(self.pesos, self.valores, self.capacidad)
+# Conexion a la base de datos
 
-    #La funcion de cruza utiliza el metodo de cruce por un solo punto
-    #No es el mejor para utilizar, ya que debemos tener cuidado de no sobrepasar el limite de la lista
-    #Lo que hace es:
-    #Se elige un punto de cruce al azar, y se intercambian los genes de los 2 individuos 
-    def crossover(self, padre1, padre2):
-        if self.num_objetos < 2:
-            hijo = Sujetos(self.num_objetos)
-            hijo.genes = padre1.genes.copy()
-            return hijo, hijo
-        #Se realiza la eleccion del punto de cruce
-        punto = random.randint(1, self.num_objetos - 1)
-        hijo1 = Sujetos(self.num_objetos)
-        hijo2 = Sujetos(self.num_objetos)
-        hijo1.genes = padre1.genes[:punto] + padre2.genes[punto:]
-        hijo2.genes = padre2.genes[:punto] + padre1.genes[punto:]
-        return hijo1, hijo2
+#La cadena sqlite:///database.db indica que vamos a usar un archivo local llamda 'database.db'
+#como nuestra base de datos
+sql_url="sqlite:///databse.db"
+#Crea el motor de la base de datos, que sera el encargado de gestionar la conexion
+engine=create_engine(sql_url)
 
-    #Usamo el metodo de mutacion por inversion (flip) de bits
-    #Cada gen tiene probabilidad de cambiar a 0 - 1 o 1 - 0
-    def mutacion(self, individuo):
-        for i in range(len(individuo.genes)):
-            if random.random() < self.prob_mutacion:
-                individuo.genes[i] = 1 - individuo.genes[i]
+#Funcion encarga de crear la tabla 'item' en la base de datos
+def create_db_and_tables():
+    #SQLModel.metadata... sera el que checara que todos los modelos que heredan de SQLModel,
+    #y que ademas esten marcado con table=True, y les creara sus tablas en la base de datos
+    SQLModel.metadata.create_all(engine)
 
-    #Podemos usar para hacer la mutacion de un hijo
-    #rm = rand_uniform(0.1) o 0.08          Para saber si vas a mutar a ese hijo
-    #   if rm < pm                           //Si si, lo mutamos
-    #   indi = rando_int(1, tamaño_cormosoma)
-    #   modificar_indice 
+#Funcion encargada de crear y proporcionar una sesion de base de datos por cada peticion
+def get_session():
+    #Abre una nueva sesion con el motor(engine) de la base de datos
+    with Session(engine) as session:
+        #Yield dara la sesion al endpoint de nuestra API
+        yield session
+#SessionDep es una anotacion que usa a Depends para inyectar una sesion de base de datos
+#en nuestras funciones
+SessionDep=Annotated[Session, Depends(get_session)] 
 
 
-    def ejecutar(self):
-        #Se guarda el mejor individuo encontrado en todas las generaciones
-        #Se encuentra vacio al inicio
-        mejor_global = None
-        #Bucle de generaciones
-        for gen in range(1, self.generaciones + 1):
-            #Crea una nueva poblacion con los nuevos sujetos (de las generaciones)
-            #Se terminara el proceso cuando se tengan el mismo numero de sujetos que la antigua poblacion
-            nueva_poblacion = []
-            while len(nueva_poblacion) < self.num_individuos:
-                #Se seleccionan a dos padres de la poblacion actual
-                padre1 = self.estrategia.seleccionar(self.poblacion)
-                padre2 = self.estrategia.seleccionar(self.poblacion)
-                #LOs padres se cruzan y nacen dos hijos
-                hijo1, hijo2 = self.crossover(padre1, padre2)
-                #Cada hijo tiene una propbailidad de cambiar sus genes
-                self.mutacion(hijo1)
-                self.mutacion(hijo2)
-                #Guarda a los hijos en la nueva poblacion
-                #Si ya se alcanzo el maximo, ya no se agrega el hijo 2 y muere
-                nueva_poblacion.append(hijo1)
-                if len(nueva_poblacion) < self.num_individuos:
-                    nueva_poblacion.append(hijo2)
-            #Se remplaza a la poblacion vieja
-            self.poblacion.sujetos = nueva_poblacion
-            #Se calcula la nueva aptitud de todos los individuos 
-            self.poblacion.evaluar(self.pesos, self.valores, self.capacidad)
-            #Guarda al mejor individuo de la poblacion
-            mejor = max(self.poblacion.sujetos, key=lambda ind: ind.aptitud)
-            #Verifica si el mejor resultado es remplazado por otro mejor
-            #Si noe existe aun ese mejor, pues se guarda
-            if mejor_global is None or mejor.aptitud > mejor_global.aptitud:
-                mejor_global = mejor
-            #Se imprime el mejor gen
-            print(f"Generación {gen}: Mejor aptitud = {mejor.aptitud}")
-        return mejor_global
+#On_event le dice a FastAPI que ejecute lo siguiente una sola vez cuando iniciamos la aplicacion
+@app.on_event("startup")
+def on_startup():
+    #Llamamos a create_db... para tener la seguridad de que la base de datos y sus tablas ya fueron
+    #creadas antes de que la aplicacion reciba peticiones
+    create_db_and_tables()
+
+#Metodos de la API - Lo importante
+
+#Get: Permite obtener todos los items
+@app.get("/items/", response_model=list[Item], tags=["Items"])
+#La funcion recibira una sesion de base de datos
+def get_all_items(db: SessionDep):
+    #db.query crea un objeto de consulta para la tabla 'Item'
+    #.all devuelve todos los resultados como una lista
+    items=db.query(Item).all()
+    return items
+
+#En /items/{item_id} -Se debe especificar el id correcto del objeto
+
+#Get: Permite obtener un item por su id 
+@app.get("/items/{item_id}", response_model=Item, tags=["Items"])
+#La funcion recibe el 'item_id' de la URL, ademas de una sesion de base de datos
+def get_item_by_id(item_id: int, db: SessionDep):
+    #Recorremos la lista de items para encontrar el que tiene el id que buscamos
+    item=db.get(Item, item_id)
+    #Si no se encuentra en la base de datos, marcamos un error 404 (no encontrado)
+    if not item :
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item no encontrado")
+    #Si se encuentra da el item    
+    return item
+
+#Post: Permite crear un item nuevo 
+#Se devuelve el codigo 201 (creado) si todo sale bien
+@app.post("/items/", response_model=Item, status_code=status.HTTP_201_CREATED, tags=["Items"])
+#Esta funcion recibe los datos del item nuevo y una sesion de base de datos, cortesia de Session Dep
+def create_item(item_data: ItemCreate, db: SessionDep):
+    #Transforma el objeto de entrada en un objeto del modelo de la tabla 'item'
+    new_item=Item.model_validate(item_data)
+    #db.add agrega el nuevo objeto a la sesion
+    db.add(new_item)
+    #db.commit confirma que los datos se hayan escrito en la base de datos
+    db.commit()
+    #db.refresh refresca new item con los datos de la base de datos y asi obtener el ID asignado
+    db.refresh(new_item)
+    return new_item
 
 
-#Main
-if __name__ == "__main__":
-    #Mensaje inicial
-    print("==== Practica 1: Problema de la mochila con algoritmo genetico ====")
-    print("Opciones de entrada de datos:")
-    print("1) Ingresar datos manualmente")
-    print("2) Usar datos de ejemplo")
+#Put: Remplaza un item existente por completo por su id 
+@app.put("/items/{item_id}", response_model=Item, tags=["Items"])
+def replace_item(item_id: int, item_data: ItemBase, db: SessionDep):
+    #Se obtiene el item a actualizar de la base de datos
+    db_item=db.get(Item, item_id)
+    #Si no existe, devolvemos error 404 (no encontrado)
+    if not db_item:
+        raise HTTPException(status_code=404, detail="Item no encontrado")
 
-    opcion_datos = input("Elige una opcion: ").strip()
-    #Si se selecciona la entra manual, preguntara cuntos objetos seran y la capacidad maxima
-    if opcion_datos == "1":
-        num_objetos = int(input("Numero de objetos: "))
-        pesos = []
-        valores = []
-        #Para almacenar esos bojetos usamos un for
-        for i in range(num_objetos):
-            peso = int(input(f"Objeto {i+1}: Peso = "))
-            valor = int(input(f"Objeto {i+1}: Valor = "))
-            pesos.append(peso)
-            valores.append(valor)
-        capacidad = int(input("Capacidad de la mochila: "))
-    else:
-        #Si se lecciona datos de ejemplo, se trabajaran con los siguientes
-        pesos = [2, 3, 4, 5]
-        valores = [3, 4, 5, 8]
-        capacidad = 8
-        num_objetos = len(pesos)
+    #model_dump transforma los datos de entrada en un diccionario
+    item_data_dict=item_data.model_dump()
+    #Se recorre este diccionario con los nuevos datos
+    for key, value in item_data_dict.item():
+        #setattr actualiza cada uno de los atributos del objeto con el nuevo valor
+        setattr(db_item, key, value)
 
-        #Mostrar los objetos en pantalla
-        print("\n=== Datos de ejemplo ===")
-        for i in range(num_objetos):
-            print(f"Objeto {i+1}: Peso = {pesos[i]}, Valor = {valores[i]}")
-        print(f"Capacidad de la mochila = {capacidad}\n")
+    #Agregamos el objeto actualizado a la sesion de base de datos para marcarlo como cambiado
+    db.add(db_item)
+    #Los cambios se guardan en la base de datos
+    db.commit()
+    #Refrescamos el objeto para estar seguros que tenemos la nueva version de la base de datos
+    db.refresh(db_item)
+    return db_item
 
-    #Iniciamos trabajando con torneo
-    #Compara 3 individuos cada vez
-    print("Analisis por torneo (despues se hara por ruleta):")
-    estrategia_torneo = SeleccionTorneo(k=3)
-    #Indica cuentos son los candidatos y cuantas veces se repetira para las generaciones 
-    #Ademas se indica cuanta es la probabilidad de mutar (se recomienda que sea entre 0 y 1)
-    ag_torneo = AlgoritmoGenetico(pesos, valores, capacidad, estrategia_torneo,
-                                  num_individuos=10, generaciones=30, prob_mutacion=0.5)
-    mejor_torneo = ag_torneo.ejecutar()
+#Patch: Actualiza parcialmente un item por su id 
+@app.patch("/items/{item_id}", response_model=Item, tags=["Items"])
+def update_item_partially(item_id: int, item_update: ItemUpdate, db: SessionDep):
+    #Se busca el objeto que queremos actualizar en la base de datos
+    db_item=db.get(Item, item_id)
+    #Si no lo encontramos, regresamos error 404 (no encontrado)
+    if not db_item:
+        raise HTTPException(status_code=404, detail="Item no encontrado")
 
-    #Segundo analisis con ruleta
-    print("\nAnalisis por Ruleta:")
-    estrategia_ruleta = SeleccionRuleta()
-    #Indica cuentos son los candidatos y cuantas veces se repetira para las generaciones 
-    #Ademas se indica cuanta es la probabilidad de mutar (se recomienda que sea entre 0 y 1)
-    ag_ruleta = AlgoritmoGenetico(pesos, valores, capacidad, estrategia_ruleta,
-                                  num_individuos=10, generaciones=30, prob_mutacion=0)
-    mejor_ruleta = ag_ruleta.ejecutar()
+    #model_dump... transforma el objeto de entrada en un diccionario,
+    #pero aqui se excluye los campos que el usuario no envio
+    update_data=item_update.model_dump(exclude_unset=True)
+    #Se recorre solo los campos que el usuario desea actualizar
+    for key, value in update_data.items():
+        #setattr actualiza los atributos en el objeto de la base de datos
+        setattr(db_item, key, value)
 
-    #Comparamos resultados
-    print("\n=== Resultados finales ===")
-    print("Mejor con Torneo:", mejor_torneo.genes, "Aptitud:", mejor_torneo.aptitud)
-    print("Mejor con Ruleta:", mejor_ruleta.genes, "Aptitud:", mejor_ruleta.aptitud)
+    #Agregamos el objeto actualizado y lo marcamos como cambiado
+    db.add(db_item)
+    #Los cambios se guardan en la base de datos
+    db.commit()
+    #Refrescamos el objeto para asegurarnos que sea la version mas reciente
+    db.refresh(db_item)
+    return db_item
 
-    if mejor_torneo.aptitud >= mejor_ruleta.aptitud:
-        print("\n>>> El mejor resultado global lo dio: Torneo")
-    else:
-        print("\n>>> El mejor resultado global lo dio: Ruleta")
+#Delete: Borra un item por su id 
+@app.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Items"])
+def delete_item(item_id: int, db: SessionDep):
+    #Se busca el item a borrar
+    item_to_delete = db.get(Item, item_id)
+    #Si no se encuentra, marcamos un error 404 (no encontrado)
+    if not item_to_delete:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item no encontrado")
+    #db.delete... marca el item para ser eliminado en la sesion
+    db.delete(item_to_delete)
+    #db.commit confirma la eliminacion de la base de datos
+    db.commit()
+    return
