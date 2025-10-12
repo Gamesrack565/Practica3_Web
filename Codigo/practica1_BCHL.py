@@ -49,7 +49,6 @@ class ItemBase(SQLModel):
 #y con table=True se marca como una tabla
 class Item(ItemBase, table=True):
     id: Optional[int]=Field(default=None, primary_key=True)
-#ItemUpdate es una clase especial utilizada para cuando queremos actualizar un item parcialmente
 #Los campos son opcionales, ya que podemos querer actualizar solo uno de ellos
 #El valor por defecto es None
 #primary_key marca el campo como la clave primaria(ID)
@@ -58,6 +57,12 @@ class Item(ItemBase, table=True):
 #Hereda de ItemBase
 class ItemCreate(ItemBase):
     pass
+
+#ItemOut nos ayudara a colocar en el orden deseado nuestras respuestas
+class ItemOut(SQLModel):
+    peso: float
+    ganancia: float
+    id: int
 
 #ItemUpdate sera usado para recibir los datos cuando queramos actualizar un item con PATCH
 class ItemUpdate(SQLModel):
@@ -99,7 +104,7 @@ def on_startup():
 #Metodos de la API - Lo importante
 
 #Get: Permite obtener todos los items
-@app.get("/items/", response_model=list[Item], tags=["Items"])
+@app.get("/items/", response_model=list[ItemOut], tags=["Items"])
 #La funcion recibira una sesion de base de datos
 def get_all_items(db: SessionDep):
     #db.query crea un objeto de consulta para la tabla 'Item'
@@ -110,7 +115,7 @@ def get_all_items(db: SessionDep):
 #En /items/{item_id} -Se debe especificar el id correcto del objeto
 
 #Get: Permite obtener un item por su id 
-@app.get("/items/{item_id}", response_model=Item, tags=["Items"])
+@app.get("/items/{item_id}", response_model=ItemOut, tags=["Items"])
 #La funcion recibe el 'item_id' de la URL, ademas de una sesion de base de datos
 def get_item_by_id(item_id: int, db: SessionDep):
     #Recorremos la lista de items para encontrar el que tiene el id que buscamos
@@ -123,7 +128,7 @@ def get_item_by_id(item_id: int, db: SessionDep):
 
 #Post: Permite crear un item nuevo 
 #Se devuelve el codigo 201 (creado) si todo sale bien
-@app.post("/items/", response_model=Item, status_code=status.HTTP_201_CREATED, tags=["Items"])
+@app.post("/items/", response_model=ItemOut, status_code=status.HTTP_201_CREATED, tags=["Items"])
 #Esta funcion recibe los datos del item nuevo y una sesion de base de datos, cortesia de Session Dep
 def create_item(item_data: ItemCreate, db: SessionDep):
     #Transforma el objeto de entrada en un objeto del modelo de la tabla 'item'
@@ -138,7 +143,7 @@ def create_item(item_data: ItemCreate, db: SessionDep):
 
 
 #Put: Remplaza un item existente por completo por su id 
-@app.put("/items/{item_id}", response_model=Item, tags=["Items"])
+@app.put("/items/{item_id}", response_model=ItemOut, tags=["Items"])
 def replace_item(item_id: int, item_data: ItemBase, db: SessionDep):
     #Se obtiene el item a actualizar de la base de datos
     db_item=db.get(Item, item_id)
@@ -162,7 +167,7 @@ def replace_item(item_id: int, item_data: ItemBase, db: SessionDep):
     return db_item
 
 #Patch: Actualiza parcialmente un item por su id 
-@app.patch("/items/{item_id}", response_model=Item, tags=["Items"])
+@app.patch("/items/{item_id}", response_model=ItemOut, tags=["Items"])
 def update_item_partially(item_id: int, item_update: ItemUpdate, db: SessionDep):
     #Se busca el objeto que queremos actualizar en la base de datos
     db_item=db.get(Item, item_id)
