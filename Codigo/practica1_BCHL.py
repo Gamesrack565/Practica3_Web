@@ -154,7 +154,7 @@ def replace_item(item_id: int, item_data: ItemBase, db: SessionDep):
     #model_dump transforma los datos de entrada en un diccionario
     item_data_dict=item_data.model_dump()
     #Se recorre este diccionario con los nuevos datos
-    for key, value in item_data_dict.item():
+    for key, value in item_data_dict.items():
         #setattr actualiza cada uno de los atributos del objeto con el nuevo valor
         setattr(db_item, key, value)
 
