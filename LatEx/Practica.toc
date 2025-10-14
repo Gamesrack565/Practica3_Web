@@ -1,0 +1,5 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Introducción}{2}{section.1}%
+\contentsline {section}{\numberline {2}Fundamentos Teóricos}{3}{section.2}%
+\contentsline {section}{\numberline {3}Implementación}{4}{section.3}%
+\contentsline {section}{Referencias}{7}{section*.7}%

@@ -9,8 +9,8 @@
 \usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{tikz}
-\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
-\usepackage{hyperref}
+% Solo una vez se carga hyperref, con tus opciones y el linkcolor
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=black]{hyperref}
 
 \begin{document}
 \definecolor{azul}{RGB}{0, 168, 255}
@@ -64,6 +64,10 @@
     \vspace{1cm}
 \end{titlepage}
 
+\newpage
+\tableofcontents
+\newpage
+
 \section{Introducción}
 \subsection*{Planteamiento del problema}
 El problema que se aborda es la falta de persistencia de datos en la aplicación.
@@ -90,13 +94,13 @@ Componentes clave de la solución:
 Para la correcta creacion de nuestra práctica, es importante que entendamos las relaciones entre las tecnologías y los conceptos que ya revisados para la creación de una API, esta vez implementando persistencia de datos.
 
 \subsection*{API RESTful}
-Una API RESTful es un estilo de arquitectura para diseñar aplicaciones en red. Se basa en un conjunto de principios que utilizan los métodos estándar de HTTP para realizar operaciones sobre los recursos. Cada recurso. que aqui seran items, es identificable a través de una URL única. Este enfoque simplifica la comunicación entre el cliente y el servidor.
+Una API RESTful es un estilo de arquitectura para diseñar aplicaciones en red. Se basa en un conjunto de principios que utilizan los métodos estándar de HTTP para realizar operaciones sobre los recursos. Cada recurso. que aqui seran items, es identificable a través de una URL única. Este enfoque simplifica la comunicación entre el cliente y el servidor.\cite{ref1}
 
 \subsection*{Entorno de Trabajo y Herramientas Principales}
 \begin{itemize}
-    \item \textbf{Python:} Es el lenguaje de programación sobre el que se construye toda la lógica de la aplicación. Su sencilla sintaxis y su amplia cantidad de librerías lo hacen ideal para el desarrollo web.
+    \item \textbf{Python:} Es el lenguaje de programación sobre el que se construye toda la lógica de la aplicación. Su sencilla sintaxis y su amplia cantidad de librerías lo hacen ideal para el desarrollo web.\cite{ref2}
     \item \textbf{FastAPI:} Framework web moderno para construir APIs con Python. Sus características más destacadas son la rapidez, la validación de datos automática mediante Pydantic y la generación de documentación interactiva , que fue crucial para probar los endpoints de nuestra API.
-    \item \textbf{Uvicorn:} Es un servidor ASGI ultrarrápido, utilizado para ejecutar la aplicación FastAPI. Permite que la API maneje múltiples peticiones de forma asíncrona, mejorando el rendimiento.
+    \item \textbf{Uvicorn:} Es un servidor ASGI ultrarrápido, utilizado para ejecutar la aplicación FastAPI. Permite que la API maneje múltiples peticiones de forma asíncrona, mejorando el rendimiento.\cite{ref3}
 \end{itemize}
 
 \subsection*{Persistencia de Datos}
@@ -107,7 +111,7 @@ La persistencia de datos es la capacidad de un sistema para poder conservar la i
     
     \item \textbf{SQLAlchemy:} Es una librería que funciona como un Mapeador Objeto-Relacional (ORM). Un ORM es una técnica que actúa como un "traductor" entre el código orientado a objetos y las tablas de una base de datos relacional. Permite manipular la base de datos utilizando código Python en lugar de escribir consultas SQL directamente.
     
-    \item \textbf{SQLModel:} Es una librería que combina \textbf{SQLAlchemy} y \textbf{Pydantic}, creada por el mismo autor de FastAPI. Permite definir la estructura de los datos, las validaciones y el esquema de la base de datos en una sola clase, reduciendo la duplicación de código y simplificando el desarrollo. En nuestra práctica, las clases como \texttt{Item} son modelos de SQLModel que representan tanto la tabla en la base de datos como los datos que la API recibe y envía.
+    \item \textbf{SQLModel:} Es una librería que combina \textbf{SQLAlchemy} y \textbf{Pydantic}, creada por el mismo autor de FastAPI. Permite definir la estructura de los datos, las validaciones y el esquema de la base de datos en una sola clase, reduciendo la duplicación de código y simplificando el desarrollo. En nuestra práctica, las clases como \texttt{Item} son modelos de SQLModel que representan tanto la tabla en la base de datos como los datos que la API recibe y envía.\cite{ref4}
 \end{itemize}
 
 \section{Implementación}
@@ -177,5 +181,17 @@ se abre, y esta misma se cierra en automatico al terminar la solicitud, lo cual 
 Este evento se ejecuta en el instante en el momento en que la API se termine de iniciar,antes de que cualquier usuario mande una peticion y solo se ejecuta una vez.
 Y esto no garantiza que la base de datos y sus tablas ya existan antes de que los usuarios empiezen a mandar peticiones.
 
+\newpage % Opcional, para que las referencias empiecen en una página nueva
+
+% Añade la línea "Referencias" al índice como si fuera una sección
+\addcontentsline{toc}{section}{Referencias}
+\begin{thebibliography}{99}
+
+    \bibitem{ref1} IBM. (s.f.). ¿Qué es una API REST? Recuperado el 14 de octubre de 2025, de \url{https://www.ibm.com/mx-es/topics/rest-apis}
+    \bibitem{ref2} Python Software Foundation. (s.f.). Acerca de Python™. Resumen Ejecutivo. Recuperado el 14 de octubre de 2025, de \url{https://www.python.org/doc/essays/blurb-es/}
+    \bibitem{ref3} Ramírez, S. (s.f.). FastAPI. Recuperado el 14 de octubre de 2025, de \url{https://fastapi.tiangolo.com/es/}
+    \bibitem{ref4} Ramírez, S. (s.f.). SQLModel. Recuperado el 14 de octubre de 2025, de \url{https://sqlmodel.tiangolo.com/es/}
+
+\end{thebibliography}
 
 \end{document}
