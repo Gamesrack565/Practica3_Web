@@ -1,9 +1,68 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
+\documentclass[12pt]{article}
+\usepackage{graphicx} % Required for inserting images
 \usepackage[spanish]{babel}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+\usepackage{hyperref}
 
 \begin{document}
+\definecolor{azul}{RGB}{0, 168, 255}
+\definecolor{azul2}{RGB}{7, 74, 163}
 
+\begin{titlepage}
+    \thispagestyle{empty}
+    \newgeometry{left=2cm, right=1cm, top=2cm, bottom=2cm}
+    
+    % Gráfico de fondo corregido para ser fiable
+    \begin{tikzpicture}[overlay, remember picture, fill opacity=0.7]
+        \begin{scope}[shift={(current page.center)}]
+            \rotatebox{-45}{\fill[azul2] (5, -15) rectangle (12, 15);}
+            \rotatebox{-45}{\fill[azul] (3, -15) rectangle (5, 15);}
+        \end{scope}
+    \end{tikzpicture}
+    
+    \begin{spacing}{1.5}
+        {\Huge \bfseries \noindent PRÁCTICA 3}
+        \vspace{10pt}
+
+        {\LARGE PERMANENCIA DE DATOS CON UNA BASE DE DATOS}
+        
+        \vspace{1cm}
+        
+        {\Large Equipo:} \\
+        {\Large Beltrán Saucedo Axel Alejandro} \\
+        {\Large Cerón Samperio Lizeth Montserrat} \\
+        {\Large Higuera Pineda Angel Abraham} \\
+        {\Large Lorenzo Silva Abad Rey} \\
+        {\Large 4BV1}
+    \end{spacing}
+    
+    \vspace{1.5cm}
+
+    \begin{minipage}{7.5cm} % Ancho ajustado
+        {\Large ESCUELA SUPERIOR DE CÓMPUTO}
+    \end{minipage}
+
+    \vfill % Empuja el contenido hacia el final de la página
+
+    \begin{flushleft}
+        {\Large \color{black}
+        % Comando \textbf corregido con llaves
+        \textbf{TECNOLOGÍAS PARA EL DESARROLLO DE APLICACIONES WEB}}
+        
+        \vspace{0.5cm}
+        
+        13/10/2025
+    \end{flushleft}
+    \vspace{1cm}
+\end{titlepage}
 
 \section{Introducción}
 \subsection*{Planteamiento del problema}
@@ -20,10 +79,78 @@ Se necesita una solución que garantice lo siguiente:
 La solución propuesta es el desarrollo de una API RESTful utilizando FastAPI para la lógica de negocio y SQLModel para la gestión de la base de datos , permitiendo así la persistencia de datos.
 Componentes clave de la solución:
 \begin{itemize}
-    \item \textbf{Framework Web (FastAPI):} Se utiliza para construir la interfaz de la API, definiendo las rutas (URLs) que permitirán a los usuarios interactuar con la información de los paquetes.} Un framework web moderno y rápido para construir APIs con Python 3.7+ basado en estándares como OpenAPI y JSON Schema.
+    \item \textbf{Framework Web (FastAPI):} Se utiliza para construir la interfaz de la API, definiendo las rutas (URLs) que permitirán a los usuarios interactuar con la información de los paquetes. Un framework web moderno y rápido para construir APIs con Python 3.7+ basado en estándares como OpenAPI y JSON Schema.
     \item \textbf{SQLModel:} Se emplea para definir la estructura de la información (qué es un "ítem", qué campos tiene, y cuál es su identificador único).
     \item \textbf{Base de datos SQLite:} Se utiliza un motor de base de datos SQLite (database.db) para almacenar los datos en un archivo físico. De esta manera, la información perdura aunque la aplicación se detenga o se reinicie.
     \item \textbf{SQLModel Engine y Session:} Se configura un motor de conexión (engine) y un sistema de sesiones (SessionDep) para establecer una comunicación eficiente y segura entre la aplicación y el archivo de la base de datos.
 \end{itemize}
+
+\section{Implementación}
+\subsection*{Código:}
+En esta seccion tendremos los nuevos modulos que usamos para el funcionamiento de la practica.\\
+
+Debemos entender la diferencia entre esta practica y la anterior, ya que pueden parecer iguales, pero tienen una diferencia crucial. 
+En la practica anterior, nuestra API gestionaba los datos de los items en una lista en memoria, lo cual tenia una principal desventaja,
+que al reiniciar nuestro servidor, todos los datos se perdian. 
+En cambio, esta vez integramos una base de datos para asegurar la permanencia de los datos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Imagen WEB 3_1.png}
+\end{figure}
+
+El principal cambio que podemos ver aqui es la adicion de la libreria SQLModel, la cual nos permitira interactuar con la base de datos,
+gracias a sus capacidades provenientes de SQLAlchemy y Pydantic.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Imagen WEB 3_2.png}
+\end{figure}
+
+En esta parte, podemos ver que los modelos de datos fueron redefinidos usando SQLModel y asi poder mapearlos en una tabla en nuestra base de datos.
+Se agrego 'table=true', que le indica a SQLModel que la clase esta representando una tabla en la base.
+Otro cambio es en id, que ahora lo definimos como la clave primaria de nuestra tabla. Esto hara que la base de datos se encargue de ir generando los id's
+de forma automatica.\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Imagen WEB 3_3.png}
+\end{figure}
+
+Esta funcion tiene el unico proposito de mostrarnos los datos en el orden deseado, el cual es peso/ganancia/id, ya que originalmente los mostraba en desorden.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Imagen WEB 3_4.png}
+\end{figure}
+
+Aqui tenemos la nueva adicion mas importante, la cual se encargara de la configuracion y manejo de la conexion con la base de datos (que estara en SQLite).
+Esta sera almacenada en un archivo bajo el nombre de database.db.
+Tambien tenemos lo que vendria a ser nuestro 'motor', por decirlo de una forma, que funcionara como el centro de comunicaciones entre la API y nuestro database.db
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Imagen WEB 3_5.png}
+\end{figure}
+
+Esta funcion sera la encargada de la creacion de las tablas y solo se ejecutara una vez al iniciar la aplicacion.
+Crea las tablas correspondientes en la base si es que no existen.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Imagen WEB 3_6.png}
+\end{figure}
+
+Aqui implementamos un sistema de sesiones por peticion. Esto se refiere a que cada vez que la API recibe una solicitud, una nueva sesion de comunicacion con la base de datos
+se abre, y esta misma se cierra en automatico al terminar la solicitud, lo cual nos garantiza un manejo seguro de las conexiones.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Imagen WEB 3_7.png}
+\end{figure}
+
+Este evento se ejecuta en el instante en el momento en que la API se termine de iniciar,antes de que cualquier usuario mande una peticion y solo se ejecuta una vez.
+Y esto no garantiza que la base de datos y sus tablas ya existan antes de que los usuarios empiezen a mandar peticiones.
+
 
 \end{document}
