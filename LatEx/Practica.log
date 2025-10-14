@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.9.23)  14 OCT 2025 02:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.9.23)  14 OCT 2025 15:02
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -649,58 +649,65 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 
 {C:/Users/Axel/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rm.enc}]
-Underfull \hbox (badness 10000) in paragraph at lines 90--91
-
- []
-
-<Imagenes/Imagen WEB 3_1.png, id=22, 717.43031pt x 248.42813pt>
-File: Imagenes/Imagen WEB 3_1.png Graphic file (type png)
-<use Imagenes/Imagen WEB 3_1.png>
-Package pdftex.def Info: Imagenes/Imagen WEB 3_1.png  used on input line 99.
-(pdftex.def)             Requested size: 430.00462pt x 148.9026pt.
-
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.101 
-       [1]
-<Imagenes/Imagen WEB 3_2.png, id=30, 579.66562pt x 126.4725pt>
-File: Imagenes/Imagen WEB 3_2.png Graphic file (type png)
-<use Imagenes/Imagen WEB 3_2.png>
-Package pdftex.def Info: Imagenes/Imagen WEB 3_2.png  used on input line 107.
-(pdftex.def)             Requested size: 430.00462pt x 93.81975pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 110--114
+l.95 \subsection
+                *{Entorno de Trabajo y Herramientas Principales} [1]
+LaTeX Font Info:    Trying to load font information for OT1+lmtt on input line 106.
+ (C:\Users\Axel\AppData\Local\Programs\MiKTeX\tex/latex/lm\ot1lmtt.fd
+File: ot1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+) [2{C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-rmtt.enc}]
+Underfull \hbox (badness 10000) in paragraph at lines 115--116
 
  []
 
-<Imagenes/Imagen WEB 3_3.png, id=31, 514.17094pt x 91.09032pt>
+<Imagenes/Imagen WEB 3_1.png, id=40, 717.43031pt x 248.42813pt>
+File: Imagenes/Imagen WEB 3_1.png Graphic file (type png)
+<use Imagenes/Imagen WEB 3_1.png>
+Package pdftex.def Info: Imagenes/Imagen WEB 3_1.png  used on input line 124.
+(pdftex.def)             Requested size: 430.00462pt x 148.9026pt.
+<Imagenes/Imagen WEB 3_2.png, id=42, 579.66562pt x 126.4725pt>
+File: Imagenes/Imagen WEB 3_2.png Graphic file (type png)
+<use Imagenes/Imagen WEB 3_2.png>
+Package pdftex.def Info: Imagenes/Imagen WEB 3_2.png  used on input line 132.
+(pdftex.def)             Requested size: 430.00462pt x 93.81975pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 135--139
+
+ []
+
+[3 <./Imagenes/Imagen WEB 3_1.png> <./Imagenes/Imagen WEB 3_2.png>]
+<Imagenes/Imagen WEB 3_3.png, id=50, 514.17094pt x 91.09032pt>
 File: Imagenes/Imagen WEB 3_3.png Graphic file (type png)
 <use Imagenes/Imagen WEB 3_3.png>
-Package pdftex.def Info: Imagenes/Imagen WEB 3_3.png  used on input line 117.
+Package pdftex.def Info: Imagenes/Imagen WEB 3_3.png  used on input line 142.
 (pdftex.def)             Requested size: 430.00462pt x 76.18034pt.
-<Imagenes/Imagen WEB 3_4.png, id=32, 687.31781pt x 127.22531pt>
+<Imagenes/Imagen WEB 3_4.png, id=51, 687.31781pt x 127.22531pt>
 File: Imagenes/Imagen WEB 3_4.png Graphic file (type png)
 <use Imagenes/Imagen WEB 3_4.png>
-Package pdftex.def Info: Imagenes/Imagen WEB 3_4.png  used on input line 124.
+Package pdftex.def Info: Imagenes/Imagen WEB 3_4.png  used on input line 149.
 (pdftex.def)             Requested size: 430.00462pt x 79.5952pt.
-[2 <./Imagenes/Imagen WEB 3_1.png> <./Imagenes/Imagen WEB 3_2.png> <./Imagenes/Imagen WEB 3_3.png>]
-<Imagenes/Imagen WEB 3_5.png, id=40, 680.5425pt x 98.61844pt>
+<Imagenes/Imagen WEB 3_5.png, id=52, 680.5425pt x 98.61844pt>
 File: Imagenes/Imagen WEB 3_5.png Graphic file (type png)
 <use Imagenes/Imagen WEB 3_5.png>
-Package pdftex.def Info: Imagenes/Imagen WEB 3_5.png  used on input line 133.
+Package pdftex.def Info: Imagenes/Imagen WEB 3_5.png  used on input line 158.
 (pdftex.def)             Requested size: 430.00462pt x 62.31201pt.
-<Imagenes/Imagen WEB 3_6.png, id=41, 700.11563pt x 164.11313pt>
+<Imagenes/Imagen WEB 3_6.png, id=53, 700.11563pt x 164.11313pt>
 File: Imagenes/Imagen WEB 3_6.png Graphic file (type png)
 <use Imagenes/Imagen WEB 3_6.png>
-Package pdftex.def Info: Imagenes/Imagen WEB 3_6.png  used on input line 141.
+Package pdftex.def Info: Imagenes/Imagen WEB 3_6.png  used on input line 166.
 (pdftex.def)             Requested size: 430.00462pt x 100.7975pt.
-<Imagenes/Imagen WEB 3_7.png, id=42, 721.19438pt x 116.68594pt>
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<Imagenes/Imagen WEB 3_7.png, id=54, 721.19438pt x 116.68594pt>
 File: Imagenes/Imagen WEB 3_7.png Graphic file (type png)
 <use Imagenes/Imagen WEB 3_7.png>
-Package pdftex.def Info: Imagenes/Imagen WEB 3_7.png  used on input line 149.
+Package pdftex.def Info: Imagenes/Imagen WEB 3_7.png  used on input line 174.
 (pdftex.def)             Requested size: 430.00462pt x 69.57231pt.
- [3 <./Imagenes/Imagen WEB 3_4.png> <./Imagenes/Imagen WEB 3_5.png> <./Imagenes/Imagen WEB 3_6.png>] [4 <./Imagenes/Imagen WEB 3_7.png>] (Practica.aux
+[4 <./Imagenes/Imagen WEB 3_3.png> <./Imagenes/Imagen WEB 3_4.png> <./Imagenes/Imagen WEB 3_5.png>] [5 <./Imagenes/Imagen WEB 3_6.png> <./Imagenes/Imagen WEB 3_7.png>] (Practica.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -709,20 +716,20 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
 Package rerunfilecheck Info: File `Practica.out' has not changed.
-(rerunfilecheck)             Checksum: F7D212BB3A698C5D507E3674988FBDC2;222.
+(rerunfilecheck)             Checksum: 4849D6D4FCF494BF937073089306ABD1;371.
  ) 
 Here is how much of TeX's memory you used:
- 21736 strings out of 474486
- 408426 string characters out of 5744227
+ 21790 strings out of 474486
+ 409276 string characters out of 5744227
  1935542 words of memory out of 5000000
- 43651 multiletter control sequences out of 15000+600000
- 593924 words of font info for 56 fonts, out of 8000000 for 9000
+ 43694 multiletter control sequences out of 15000+600000
+ 596954 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,6n,87p,513b,577s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss12.pfb><C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss17.pfb><C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmssbx10.pfb>
-Output written on Practica.pdf (5 pages, 181302 bytes).
+ 84i,6n,87p,602b,577s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss12.pfb><C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss17.pfb><C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss8.pfb><C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmssbx10.pfb><C:/Users/Axel/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb>
+Output written on Practica.pdf (6 pages, 219468 bytes).
 PDF statistics:
- 74 PDF objects out of 1000 (max. 8388607)
- 10 named destinations out of 1000 (max. 500000)
- 64 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 97 PDF objects out of 1000 (max. 8388607)
+ 15 named destinations out of 1000 (max. 500000)
+ 72 words of extra memory for PDF output out of 10000 (max. 10000000)
 

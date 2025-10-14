@@ -85,6 +85,31 @@ Componentes clave de la solución:
     \item \textbf{SQLModel Engine y Session:} Se configura un motor de conexión (engine) y un sistema de sesiones (SessionDep) para establecer una comunicación eficiente y segura entre la aplicación y el archivo de la base de datos.
 \end{itemize}
 
+\section{Fundamentos Teóricos}
+
+Para la correcta creacion de nuestra práctica, es importante que entendamos las relaciones entre las tecnologías y los conceptos que ya revisados para la creación de una API, esta vez implementando persistencia de datos.
+
+\subsection*{API RESTful}
+Una API RESTful es un estilo de arquitectura para diseñar aplicaciones en red. Se basa en un conjunto de principios que utilizan los métodos estándar de HTTP para realizar operaciones sobre los recursos. Cada recurso. que aqui seran items, es identificable a través de una URL única. Este enfoque simplifica la comunicación entre el cliente y el servidor.
+
+\subsection*{Entorno de Trabajo y Herramientas Principales}
+\begin{itemize}
+    \item \textbf{Python:} Es el lenguaje de programación sobre el que se construye toda la lógica de la aplicación. Su sencilla sintaxis y su amplia cantidad de librerías lo hacen ideal para el desarrollo web.
+    \item \textbf{FastAPI:} Framework web moderno para construir APIs con Python. Sus características más destacadas son la rapidez, la validación de datos automática mediante Pydantic y la generación de documentación interactiva , que fue crucial para probar los endpoints de nuestra API.
+    \item \textbf{Uvicorn:} Es un servidor ASGI ultrarrápido, utilizado para ejecutar la aplicación FastAPI. Permite que la API maneje múltiples peticiones de forma asíncrona, mejorando el rendimiento.
+\end{itemize}
+
+\subsection*{Persistencia de Datos}
+La persistencia de datos es la capacidad de un sistema para poder conservar la información posterior de la duración de una sola ejecución. En nuestra practica pasada, los datos eran volátiles, ya que se almacenaban en una lista en memoria. En esta práctica, se implementa la persistencia a través de los siguientes componentes:
+
+\begin{itemize}
+    \item \textbf{SQLite:} Es un motor de base de datos relacional, autocontenido y que no requiere un servidor. Almacena toda la base de datos en un único archivo (en nuestro caso, \texttt{database.db}). Es ideal para desarrollo y aplicaciones de pequeña a mediana escala por su simplicidad y portabilidad.
+    
+    \item \textbf{SQLAlchemy:} Es una librería que funciona como un Mapeador Objeto-Relacional (ORM). Un ORM es una técnica que actúa como un "traductor" entre el código orientado a objetos y las tablas de una base de datos relacional. Permite manipular la base de datos utilizando código Python en lugar de escribir consultas SQL directamente.
+    
+    \item \textbf{SQLModel:} Es una librería que combina \textbf{SQLAlchemy} y \textbf{Pydantic}, creada por el mismo autor de FastAPI. Permite definir la estructura de los datos, las validaciones y el esquema de la base de datos en una sola clase, reduciendo la duplicación de código y simplificando el desarrollo. En nuestra práctica, las clases como \texttt{Item} son modelos de SQLModel que representan tanto la tabla en la base de datos como los datos que la API recibe y envía.
+\end{itemize}
+
 \section{Implementación}
 \subsection*{Código:}
 En esta seccion tendremos los nuevos modulos que usamos para el funcionamiento de la practica.\\

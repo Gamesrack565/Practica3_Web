@@ -280,6 +280,12 @@ INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\lm\lm-rm.enc
 INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmss12.tfm
 INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmssbx10.tfm
 INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmssbx10.tfm
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmtt.fd
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmtt.fd
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\tex\latex\lm\ot1lmtt.fd
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmtt12.tfm
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\tfm\public\lm\rm-lmss8.tfm
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\lm\lm-rmtt.enc
 INPUT .\Imagenes\Imagen WEB 3_1.png
 INPUT .\Imagenes\Imagen WEB 3_1.png
 INPUT .\Imagenes\Imagen WEB 3_1.png
@@ -336,5 +342,9 @@ INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmss12.p
 INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmss12.pfb
 INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmss17.pfb
 INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmss17.pfb
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmss8.pfb
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmss8.pfb
 INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmssbx10.pfb
 INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmssbx10.pfb
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtt12.pfb
+INPUT C:\Users\Axel\AppData\Local\Programs\MiKTeX\fonts\type1\public\lm\lmtt12.pfb
