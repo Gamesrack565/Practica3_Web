@@ -114,6 +114,13 @@ La persistencia de datos es la capacidad de un sistema para poder conservar la i
     \item \textbf{SQLModel:} Es una librería que combina \textbf{SQLAlchemy} y \textbf{Pydantic}, creada por el mismo autor de FastAPI. Permite definir la estructura de los datos, las validaciones y el esquema de la base de datos en una sola clase, reduciendo la duplicación de código y simplificando el desarrollo. En nuestra práctica, las clases como \texttt{Item} son modelos de SQLModel que representan tanto la tabla en la base de datos como los datos que la API recibe y envía.\cite{ref4}
 \end{itemize}
 
+\section{Diagrama UML}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Diagrama.png}
+\end{figure}
+
+
 \section{Implementación}
 \subsection*{Código:}
 En esta seccion tendremos los nuevos modulos que usamos para el funcionamiento de la practica.\\
@@ -165,7 +172,7 @@ Tambien tenemos lo que vendria a ser nuestro 'motor', por decirlo de una forma, 
 Esta funcion sera la encargada de la creacion de las tablas y solo se ejecutara una vez al iniciar la aplicacion.
 Crea las tablas correspondientes en la base si es que no existen.
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{Imagenes/Imagen WEB 3_6.png}
 \end{figure}
